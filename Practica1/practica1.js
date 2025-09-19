@@ -19,3 +19,10 @@ console.log(cuadrado(1));
 console.log(cuadrado(2));
 console.log(cuadrado(3));
 
+//Saludo personalizado
+
+const saludoPersonalizado = (nombre, edad) => {
+    return "Hola me llamo " + nombre + " y tengo " + edad + " años.";
+};
+
+console.log(saludoPersonalizado("Andres", 19));
