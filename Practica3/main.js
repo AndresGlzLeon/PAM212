@@ -6,14 +6,12 @@ console.log(restar(10, 1));
 //EJERCICIO B
 function verificarUsuario(usuario) {
     return new Promise((resolve, reject) => {
-        setTimeout(() => {
             if (usuario === "Admin") {
                 resolve("Usuario verificado");
             } else {
                 reject("Usuario no verificado");
             }
-        }, 2000);
-    });
+        });
 }
 
     verificarUsuario("Admin")
@@ -23,3 +21,19 @@ function verificarUsuario(usuario) {
     verificarUsuario("Andres")
     .then(res => console.log(res))
     .catch(err => console.log(err));
+
+//EJERCICIO C
+function simularPeticionAPI(){
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve("Datos recibidos de la API");
+        }, 5000);
+    });
+}
+
+async function obtenerDatos(){
+    const datos = await simularPeticionAPI();
+    console.log(datos);
+}
+
+obtenerDatos();
