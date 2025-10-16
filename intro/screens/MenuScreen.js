@@ -2,7 +2,7 @@ import { Text, StyleSheet, View, Button } from 'react-native'
 import React, { useState } from 'react';
 import ContadorScreen from './ContadorScreen';
 import BotonesScreen from './BotonesScreen';
-
+import ActivityIndicatorScreen from './ActivityIndicatorScreen';
 
 export default function MenuScreen() {
     const [screen,setScreen] = useState('menu');
@@ -12,25 +12,28 @@ export default function MenuScreen() {
             return <ContadorScreen/>;
         case 'botones': 
             return <BotonesScreen/>;
+        case 'activityIndicator':
+            return <ActivityIndicatorScreen/>;
         case 'menu':
             default:
                 return(
     <View style={styles.container}>
         <Text>Menu de Practicas</Text>
                 <View style={styles.contenedorBotones}>
-        <Button onPress={()=>setScreen('Contador')} title = 'Pract:Contador'/>
-        <Button onPress={()=>setScreen('Botones')} title = 'Pract:Botones' />
-        <Button onPress={()=>setScreen('TextImput')} title = 'Pract:TextImput' />
-        <Button onPress={()=>setScreen('ImageBackground')} title = 'Pract:ImageBackground' />
-        <Button onPress={()=>setScreen('ScrollView')} title = 'Pract:ScrollView' />
-        <Button onPress={()=>setScreen('FlatList')} title = 'Pract:FlatList' />
-        <Button onPress={()=>setScreen('Modal')} title = 'Pract:Modal' />
-        <Button onPress={()=>setScreen('Bottom Sheet')} title = 'Pract:BottomSheet' />
+        <Button onPress={()=>setScreen('contador')} title = 'Pract:Contador'/>
+        <Button onPress={()=>setScreen('botones')} title = 'Pract:Botones' />
+        <Button onPress={()=>setScreen('textInput')} title = 'Pract:TextInput' />
+        <Button onPress={()=>setScreen('imageBackground')} title = 'Pract:ImageBackground' />
+        <Button onPress={()=>setScreen('scrollView')} title = 'Pract:ScrollView' />
+        <Button onPress={()=>setScreen('activityIndicator')} title = 'Pract:ActivityIndicator' />
+        <Button onPress={()=>setScreen('flatList')} title = 'Pract:FlatList' />
+        <Button onPress={()=>setScreen('modal')} title = 'Pract:Modal' />
+        <Button onPress={()=>setScreen('bottomSheet')} title = 'Pract:BottomSheet' />
                 </View>
     </View>
-                    )
-                }
-            }
+        )
+    }
+}
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -45,4 +48,4 @@ const styles = StyleSheet.create({
         gap:20,
     },
 
-    });
+});
