@@ -4,6 +4,7 @@ import ContadorScreen from './ContadorScreen';
 import BotonesScreen from './BotonesScreen';
 import TextScreen from './TextScreen';
 import ActivityIndicatorScreen from './ActivityIndicatorScreen';
+import SplashScreenPro from './ImgBackSplashScreen';
 
 export default function MenuScreen() {
     const [screen,setScreen] = useState('menu');
@@ -17,6 +18,8 @@ export default function MenuScreen() {
             return <ActivityIndicatorScreen/>;
         case "textInput":
             return <TextScreen/>
+        case 'imageBackground':
+            return <SplashScreenPro/>
         case 'menu':
             default:
                 return(
