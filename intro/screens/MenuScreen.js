@@ -5,6 +5,9 @@ import BotonesScreen from './BotonesScreen';
 import TextScreen from './TextScreen';
 import ActivityIndicatorScreen from './ActivityIndicatorScreen';
 import SplashScreenPro from './ImgBackSplashScreen';
+import ScrollViewScreen from './ScrollViewScreen';
+import Repaso1Screen from './Repaso1Screen';
+
 
 export default function MenuScreen() {
     const [screen,setScreen] = useState('menu');
@@ -20,6 +23,10 @@ export default function MenuScreen() {
             return <TextScreen/>
         case 'imageBackground':
             return <SplashScreenPro/>
+        case  "repaso1" :
+            return <Repaso1Screen/>
+        case 'scrollView' :
+            return <ScrollViewScreen></ScrollViewScreen>
         case 'menu':
             default:
                 return(
@@ -35,6 +42,7 @@ export default function MenuScreen() {
         <Button onPress={()=>setScreen('flatList')} title = 'Pract:FlatList' />
         <Button onPress={()=>setScreen('modal')} title = 'Pract:Modal' />
         <Button onPress={()=>setScreen('bottomSheet')} title = 'Pract:BottomSheet' />
+        <Button onPress={()=>setScreen('repaso1')} title = 'Pract:Repaso 1' />        
                 </View>
     </View>
         )
@@ -43,7 +51,7 @@ export default function MenuScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#C8A2C8',
+        backgroundColor: '#0044ffff',
         alignItems: 'center',
         justifyContent: 'center',
     },
