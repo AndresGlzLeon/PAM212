@@ -8,54 +8,54 @@ import {
   ImageBackground,
   TextInput,
   Alert,
-  Buttom,
+  Switch,
+  Button,
 } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import TextScreen from "./TextScreen";
 import FormularioScreen from "./FormularioScreen";
 
-
-//Background
 SplashScreen.preventAutoHideAsync();
 const { height } = Dimensions.get("window");
 
-
-
 export default function Repaso1Screen() {
-
-    
   const [showMain, setShowMain] = useState(false); // controla la pantalla principal
 
-  // Animaciones Splash
   const fadeLogo = useRef(new Animated.Value(0)).current;
   const scaleLogo = useRef(new Animated.Value(0.5)).current;
   const rotateLogo = useRef(new Animated.Value(0)).current;
   const slideText = useRef(new Animated.Value(height / 2)).current;
   const fadeOut = useRef(new Animated.Value(1)).current;
 
-  //Variables de forulario
-    const [usuario, setUsuario] = useState('');
-    const [correo, setCorreo] = useState('');
-  
-    const enviarDatos = () => {
-      if (usuario.trim() === '' || correo.trim() === "" ) {
-        Alert.alert('Error', 'Completa todos los campos');
-        alert('Error: Completa todos los campos');
-        setCorreo('Campo en blanco, por favor completa todos los campos');
-  
-      } else {
-        Alert.alert('¡Hola!, tus datos fueron enviados correctamente p');
-        alert('¡Hola!, Tus datos fueron enviados correctamente.');
-  
-        setCorreo('¡Hola!, Tus datos fueron enviados correctamente :3.');
-      }
-    };
+  const [usuario, setUsuario] = useState("");
+  const [correo, setCorreo] = useState("");
+  const [aceptaTerminos, setAceptaTerminos] = useState(false);
 
+  // Validación y alertas
+  const enviarDatos = () => {
+    if (usuario.trim() === "" || correo.trim() === "") {
+      Alert.alert("Error", "Completa todos los campos");
+      alert("Error: Completa todos los campos");
+      setCorreo("Campo en blanco, por favor completa todos los campos");
+      return;
+    }
 
+    if (!aceptaTerminos) {
+      Alert.alert("Aviso", "Debes aceptar los términos y condiciones");
+      alert("Debes aceptar los términos y condiciones");
+      return;
+    }
 
+    Alert.alert("¡Hola!", "Tus datos fueron enviados correctamente");
+    alert(`¡Hola ${usuario}!, tus datos fueron enviados correctamente.`);
+
+    setCorreo("¡Hola!, Tus datos fueron enviados correctamente :3.");
+    setUsuario("");
+    setCorreo("");
+    setAceptaTerminos(false);
+  };
 
   useEffect(() => {
-    // Animación inicial del logo: fade + scale + rotación
     Animated.parallel([
       Animated.timing(fadeLogo, {
         toValue: 1,
@@ -74,7 +74,6 @@ export default function Repaso1Screen() {
       }),
     ]).start();
 
-    // Animación del texto: slide + fade
     Animated.timing(slideText, {
       toValue: 0,
       duration: 1000,
@@ -82,15 +81,14 @@ export default function Repaso1Screen() {
       delay: 800,
     }).start();
 
-    // Después de 3s, fade-out del Splash y mostrar contenido principal
     const timer = setTimeout(async () => {
       Animated.timing(fadeOut, {
         toValue: 0,
         duration: 800,
         useNativeDriver: false,
       }).start(async () => {
-        await SplashScreen.hideAsync(); // oculta splash de Expo
-        setShowMain(true); // muestra contenido principal
+        await SplashScreen.hideAsync(); 
+        setShowMain(true);
       });
     }, 3000);
 
@@ -107,16 +105,45 @@ export default function Repaso1Screen() {
       <ImageBackground
         source={require("../assets/back2.png")}
         style={styles.background}
-        resizeMode="cover">
+        resizeMode="cover"
+      >
+        <View style={styles.content}>
+          <Text style={styles.text}>Registro de Usuario</Text>
 
-            <View>
-                <FormularioScreen></FormularioScreen>
-            </View>        
+          <TextInput
+            placeholder="Nombre completo"
+            value={usuario}
+            onChangeText={setUsuario}
+            style={styles.input}
+          />
+
+          <TextInput
+            placeholder="Correo electrónico"
+            value={correo}
+            onChangeText={setCorreo}
+            style={styles.input}
+          />
+
+          <View style={styles.switchContainer}>
+            <Switch
+              value={aceptaTerminos}
+              onValueChange={setAceptaTerminos}
+              thumbColor={aceptaTerminos ? "#6200ee" : "#ccc"}
+              trackColor={{ true: "#a47bf7ff", false: "#999" }}
+            />
+            <Text style={styles.switchLabel}>
+              Acepto los términos y condiciones
+            </Text>
+          </View>
+
+          <Button title="Registrarse" color="#a47bf7ff" onPress={enviarDatos} />
+
+          <Text style={styles.mensaje}>{correo}</Text>
+        </View>
       </ImageBackground>
     );
   }
 
-  // Splash animado
   return (
     <Animated.View style={[styles.container, { opacity: fadeOut }]}>
       <Animated.Image
@@ -133,7 +160,7 @@ export default function Repaso1Screen() {
       <Animated.Text
         style={[styles.text, { transform: [{ translateY: slideText }] }]}
       >
-        ¡Practica de repaso 1 !
+        ¡Práctica de Repaso 1!
       </Animated.Text>
       <Animated.View
         style={[
@@ -174,9 +201,9 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   background: {
-    flex: 1, 
+    flex: 1,
     width: "100%",
-    height: "100%", 
+    height: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -184,24 +211,37 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     padding: 20,
     borderRadius: 10,
+    width: "85%",
   },
   text: {
     color: "white",
     fontSize: 24,
-    marginBottom: 10,
+    marginBottom: 15,
     textAlign: "center",
   },
-    input:{
-    width:'80%',
-    borderWidth:3,
-    borderColor:'#a47bf7ff',
-    padding:12,
-    borderRadius:9
+  input: {
+    width: "100%",
+    borderWidth: 3,
+    borderColor: "#a47bf7ff",
+    padding: 12,
+    borderRadius: 9,
+    marginBottom: 10,
+    backgroundColor: "#fff",
   },
-  mensaje:{
-    marginTop:20,
-    fontSize:18,
-    color:'#fb61e9ff',
-    textAlign:'center'
-  }
+  switchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  switchLabel: {
+    color: "#fff",
+    marginLeft: 10,
+    fontSize: 15,
+  },
+  mensaje: {
+    marginTop: 20,
+    fontSize: 18,
+    color: "#fb61e9ff",
+    textAlign: "center",
+  },
 });
