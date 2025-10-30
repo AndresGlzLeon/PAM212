@@ -2,12 +2,13 @@ import { Text, StyleSheet, View, Button } from 'react-native'
 import React, { useState } from 'react';
 import ContadorScreen from './ContadorScreen';
 import BotonesScreen from './BotonesScreen';
-import TextScreen from './TextScreen';
 import ActivityIndicatorScreen from './ActivityIndicatorScreen';
-import SplashScreenPro from './ImgBackSplashScreen';
+import TextInputScreen from './TextInputScreen';
+import ImageBackgroundScreen from './ImageBackgroundScreen';
 import ScrollViewScreen from './ScrollViewScreen';
-import Repaso1Screen from './Repaso1Screen';
-
+import FlatListScreen from './FlatListScreen';
+import ModalScreen from './ModalScreen';
+import BottomSheetScreen from './BottomSheetScreen';
 
 export default function MenuScreen() {
     const [screen,setScreen] = useState('menu');
@@ -19,14 +20,14 @@ export default function MenuScreen() {
             return <BotonesScreen/>;
         case 'activityIndicator':
             return <ActivityIndicatorScreen/>;
-        case "textInput":
-            return <TextScreen/>
+        case 'textInput':
+            return <TextInputScreen/>;
         case 'imageBackground':
-            return <SplashScreenPro/>
-        case  "repaso1" :
-            return <Repaso1Screen/>
-        case 'scrollView' :
-            return <ScrollViewScreen></ScrollViewScreen>
+            return <ImageBackgroundScreen/>;
+        case 'scrollView':
+            return <ScrollViewScreen/>;
+        case 'flatList':
+            return <FlatListScreen/>;
         case 'menu':
             default:
                 return(
@@ -34,7 +35,7 @@ export default function MenuScreen() {
         <Text>Menu de Practicas</Text>
                 <View style={styles.contenedorBotones}>
         <Button onPress={()=>setScreen('contador')} title = 'Pract:Contador'/>
-        <Button onPress={()=>setScreen('botones')} title = 'Pract:Botones' />
+        <Button onPress={()=>setScreen('botones')} title = 'Pract:Botones' />gi
         <Button onPress={()=>setScreen('textInput')} title = 'Pract:TextInput' />
         <Button onPress={()=>setScreen('imageBackground')} title = 'Pract:ImageBackground' />
         <Button onPress={()=>setScreen('scrollView')} title = 'Pract:ScrollView' />
@@ -42,7 +43,6 @@ export default function MenuScreen() {
         <Button onPress={()=>setScreen('flatList')} title = 'Pract:FlatList' />
         <Button onPress={()=>setScreen('modal')} title = 'Pract:Modal' />
         <Button onPress={()=>setScreen('bottomSheet')} title = 'Pract:BottomSheet' />
-        <Button onPress={()=>setScreen('repaso1')} title = 'Pract:Repaso 1' />        
                 </View>
     </View>
         )
@@ -51,7 +51,7 @@ export default function MenuScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#0044ffff',
+        backgroundColor: '#C8A2C8',
         alignItems: 'center',
         justifyContent: 'center',
     },
