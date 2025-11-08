@@ -2,32 +2,39 @@ import React from "react";
 import { ImageBackground, ScrollView, View, Text, StyleSheet } from 'react-native';
 
 const secciones = [
-    Deportes = {
+    {Deportes : [{
         id : 1,
         titulo: "Deportes",
         fecha: "07-11-24",
         resumen : "",
-    },
-    Nacional = {
+    }]},
+    {Nacional : [{
         id : 2,
         titulo: "Nacional",
-        fecha: "10-10-25",
+        fecha: "07-11-24",
         resumen : "",
-    },
-    Entretenimiento = {
+    }]},
+    {Entretenimiento : [{
         id : 3,
         titulo: "Entretenimiento",
-        fecha: "11-09-25",
+        fecha: "07-11-24",
         resumen : "",
-    },
-    Tecnologia = {
+    }]},
+    {Tecnologia : [{
         id : 4,
         titulo: "Tecnologia",
-        fecha: "05-11-25",
+        fecha: "07-11-24",
         resumen : "",
-    },
-
+    }]},
 ]
+
+const SimpleHeader = ({ title }) => {
+  return (
+    <View style={styles.header}>
+      <Text style={styles.title}>{title}</Text>
+    </View>
+  );
+};
 
 export default function Principal(){
 
@@ -39,9 +46,9 @@ return(
         showsVerticalScrollIndicator={false}
         style={styles.verticalScroll}
       >
-        {secciones.map((val) => (
+         {secciones.map((val) => (
           <View style={styles.cardVertical} key={val.id}>
-            <Text style={styles.subtitle}></Text>
+            <Text style={styles.subtitle}>{secciones.map(() => ({}))}</Text>
           </View>
         ))}
       </ScrollView>
