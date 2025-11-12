@@ -4,11 +4,10 @@ import ContadorScreen from './ContadorScreen';
 import BotonesScreen from './BotonesScreen';
 import ActivityIndicatorScreen from './ActivityIndicatorScreen';
 import TextInputScreen from './TextInputScreen';
-import ImageBackgroundScreen from './ImageBackgroundScreen';
+import ImgBackSplashScreen from './ImgBackSplashScreen';
 import ScrollViewScreen from './ScrollViewScreen';
 import FlatListScreen from './FlatListScreen';
 import ModalScreen from './ModalScreen';
-import BottomSheetScreen from './BottomSheetScreen';
 
 export default function MenuScreen() {
     const [screen,setScreen] = useState('menu');
@@ -23,11 +22,13 @@ export default function MenuScreen() {
         case 'textInput':
             return <TextInputScreen/>;
         case 'imageBackground':
-            return <ImageBackgroundScreen/>;
+            return <ImgBackSplashScreen/>;
         case 'scrollView':
             return <ScrollViewScreen/>;
         case 'flatList':
             return <FlatListScreen/>;
+        case 'modal':
+            return <ModalScreen/>
         case 'menu':
             default:
                 return(
@@ -35,7 +36,7 @@ export default function MenuScreen() {
         <Text>Menu de Practicas</Text>
                 <View style={styles.contenedorBotones}>
         <Button onPress={()=>setScreen('contador')} title = 'Pract:Contador'/>
-        <Button onPress={()=>setScreen('botones')} title = 'Pract:Botones' />gi
+        <Button onPress={()=>setScreen('botones')} title = 'Pract:Botones' />
         <Button onPress={()=>setScreen('textInput')} title = 'Pract:TextInput' />
         <Button onPress={()=>setScreen('imageBackground')} title = 'Pract:ImageBackground' />
         <Button onPress={()=>setScreen('scrollView')} title = 'Pract:ScrollView' />
