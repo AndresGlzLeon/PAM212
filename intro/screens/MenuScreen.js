@@ -8,6 +8,7 @@ import ImgBackSplashScreen from './ImgBackSplashScreen';
 import ScrollViewScreen from './ScrollViewScreen';
 import FlatListScreen from './FlatListScreen';
 import ModalScreen from './ModalScreen';
+import BottomSheetScreen from './BottomSheetScreen';
 
 export default function MenuScreen() {
     const [screen,setScreen] = useState('menu');
@@ -29,6 +30,8 @@ export default function MenuScreen() {
             return <FlatListScreen/>;
         case 'modal':
             return <ModalScreen/>
+        case 'bottomSheet':
+            return <BottomSheetScreen/>
         case 'menu':
             default:
                 return(
