@@ -1,24 +1,15 @@
-import { useEffect, useState, useCallback } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  FlatList,
-  StyleSheet,
-  Alert,
-  ActivityIndicator,
-  Platform
-} from 'react-native';
-import { UsuarioController } from '../controllers/UsuarioController';
-
-const controller = new UsuarioController();
+import { useEffect, useState, useCallback, useRef } from 'react';
+import {View,Text,TextInput,TouchableOpacity,FlatList,StyleSheet,Alert,ActivityIndicator,Platform,Button} from 'react-native';import { UsuarioController } from '../controllers/UsuarioController';
 
 export default function InsertUsuarioScreen() {
+  const controllerRef = useRef(new UsuarioController());
+  const controller = controllerRef.current;
+
   const [usuarios, setUsuarios] = useState([]);
   const [nombre, setNombre] = useState('');
   const [loading, setLoading] = useState(true);
   const [guardando, setGuardando] = useState(false);
+  const [editandoId, setEditandoId] = useState(null);
 
   const cargarUsuarios = useCallback(async () => {
     try {
@@ -27,11 +18,11 @@ export default function InsertUsuarioScreen() {
       setUsuarios(data);
       console.log(`${data.length} usuarios cargados`);
     } catch (error) {
-      Alert.alert('Error', error.message);
+      Alert.alert('Error', error.message || String(error));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [controller]);
 
   useEffect(() => {
     const init = async () => {
@@ -39,42 +30,79 @@ export default function InsertUsuarioScreen() {
       await cargarUsuarios();
     };
     init();
-    controller.addListener(cargarUsuarios);
+    controller.addListener && controller.addListener(cargarUsuarios);
     return () => {
-      controller.removeListener(cargarUsuarios);
+      controller.removeListener && controller.removeListener(cargarUsuarios);
     };
-  }, [cargarUsuarios]);
+  }, [cargarUsuarios, controller]);
 
-  const handleAgregar = async () => {
+  const guardar = async () => {
     if (guardando) return;
+    if (!nombre || !nombre.trim()) {
+      Alert.alert('Validación', 'El nombre es obligatorio.');
+      return;
+    }
     try {
       setGuardando(true);
-      const usuarioCreado = await controller.crearUsuario(nombre);
-      Alert.alert('Usuario Creado', `"${usuarioCreado.nombre}" guardado con ID: ${usuarioCreado.id}`);
+      if (editandoId) {
+        await controller.actualizarUsuario(editandoId, nombre);
+        setEditandoId(null);
+        Alert.alert('Éxito', 'Usuario actualizado.');
+      } else {
+        const creado = await controller.crearUsuario(nombre);
+        Alert.alert('Éxito', `Usuario "${creado.nombre}" creado (ID: ${creado.id}).`);
+      }
       setNombre('');
+      await cargarUsuarios();
     } catch (error) {
-      Alert.alert('Error', error.message);
+      Alert.alert('Error', error.message || String(error));
     } finally {
       setGuardando(false);
     }
   };
 
+  const eliminar = async (id) => {
+    Alert.alert('Confirmar', '¿Eliminar usuario?', [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Eliminar',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await controller.eliminarUsuario(id);
+            if (editandoId === id) {
+              setEditandoId(null);
+              setNombre('');
+            }
+            await cargarUsuarios();
+            Alert.alert('Éxito', 'Usuario eliminado.');
+          } catch (error) {
+            Alert.alert('Error', error.message || String(error));
+          }
+        }
+      }
+    ]);
+  };
+
   const renderUsuario = ({ item, index }) => (
-    <View style={styles.userItem}>
-      <View style={styles.userNumber}>
-        <Text style={styles.userNumberText}>{index + 1}</Text>
-      </View>
-      <View style={styles.userInfo}>
-        <Text style={styles.userName}>{item.nombre}</Text>
-        <Text style={styles.userId}>ID: {item.id}</Text>
-        <Text style={styles.userDate}>
-          {new Date(item.fechaCreacion).toLocaleDateString('es-MX', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          })}
-        </Text>
-      </View>
+    <View style={{ flexDirection: 'row', marginVertical: 5, alignItems: 'center' }}>
+      <Text style={{ flex: 1 }}>{item.nombre}</Text>
+
+      <Button
+        title="Editar"
+        onPress={() => {
+          setNombre(item.nombre || '');
+          setEditandoId(item.id);
+        }}
+      />
+
+      <View style={{ width: 8 }} />
+
+      <Button
+        title="Eliminar"
+        color="#d9534f"
+        onPress={() => eliminar(item.id)}
+      />
     </View>
   );
 
@@ -86,7 +114,7 @@ export default function InsertUsuarioScreen() {
       </Text>
 
       <View style={styles.insertSection}>
-        <Text style={styles.sectionTitle}>Insertar Usuario</Text>
+        <Text style={styles.sectionTitle}>{editandoId ? 'Editar Usuario' : 'Insertar Usuario'}</Text>
         <TextInput
           style={styles.input}
           placeholder="Escribe el nombre del usuario"
@@ -96,11 +124,11 @@ export default function InsertUsuarioScreen() {
         />
         <TouchableOpacity
           style={[styles.button, guardando && styles.buttonDisabled]}
-          onPress={handleAgregar}
+          onPress={guardar}
           disabled={guardando}
         >
           <Text style={styles.buttonText}>
-            {guardando ? 'Guardando...' : 'Agregar Usuario'}
+            {guardando ? 'Guardando...' : editandoId ? 'Actualizar Usuario' : 'Agregar Usuario'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -121,7 +149,7 @@ export default function InsertUsuarioScreen() {
         ) : (
           <FlatList
             data={usuarios}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={item => item.id.toString()}
             renderItem={renderUsuario}
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
